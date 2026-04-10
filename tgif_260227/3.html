@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>楽したい: とりあえずAIに頼ろう</title>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@300;500;800&amp;family=Noto+Sans+JP:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            background-color: #0B1120;
+            font-family: 'M PLUS 1', 'Noto Sans JP', sans-serif;
+            overflow: hidden;
+            color: #ffffff;
+            position: relative;
+        }
+
+        /* Subtle grid background */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-size: 40px 40px;
+            /* Using solid colors to simulate grid lines without gradients */
+            background-image: 
+                linear-gradient(to right, #1e293b 1px, transparent 1px),
+                linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 60px;
+        }
+
+        .header-line {
+            height: 4px;
+            width: 100px;
+            background-color: #3B82F6;
+            margin-bottom: 20px;
+        }
+
+        /* Comparison Chart Styles */
+        .comparison-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: 100%;
+        }
+
+        .process-box {
+            background-color: #1E293B;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .process-title {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background-color: #0B1120;
+            padding: 0 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #94A3B8;
+            border: 1px solid #334155;
+            border-radius: 20px;
+        }
+
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 80px;
+            position: relative;
+        }
+
+        .node-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .node-label {
+            font-size: 0.75rem;
+            color: #CBD5E1;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        .arrow {
+            flex: 1;
+            height: 2px;
+            background-color: #475569;
+            position: relative;
+            margin: 0 10px;
+        }
+
+        .arrow::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: -4px;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 8px solid #475569;
+        }
+
+        /* Before Style */
+        .process-box.before {
+            border-color: #475569;
+            opacity: 0.7;
+        }
+
+        .process-box.before .node-icon {
+            background-color: #334155;
+            color: #94A3B8;
+        }
+
+        /* After Style */
+        .process-box.after {
+            border-color: #3B82F6;
+            background-color: rgba(30, 41, 59, 0.8);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+        }
+
+        .process-box.after .node-icon.ai {
+            background-color: #2563EB;
+            color: #ffffff;
+            animation: pulse-blue 2s infinite;
+        }
+
+        .process-box.after .node-icon.human {
+            background-color: #0F172A;
+            color: #60A5FA;
+            border: 1px solid #3B82F6;
+        }
+        
+        .process-box.after .node-icon.db {
+            background-color: #0F172A;
+            color: #34D399;
+            border: 1px solid #10B981;
+        }
+
+        .ai-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #F59E0B;
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+            transform: rotate(15deg);
+            z-index: 5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        @keyframes pulse-blue {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+
+        /* Right Column Content */
+        .card-item {
+            background-color: rgba(30, 41, 59, 0.5);
+            border-left: 4px solid #64748B;
+            padding: 20px;
+            margin-bottom: 24px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .card-item.highlight {
+            border-left-color: #3B82F6;
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .idea-bubble {
+            display: inline-block;
+            background-color: #3B82F6;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px 20px 20px 0;
+            font-weight: bold;
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+        }
+
+    </style>
+</head>
+<body style="">
+<div class="bg-grid"></div>
+<div class="content-wrapper">
+<!-- Header -->
+<header class="mb-8">
+<div class="header-line"></div>
+<h1 class="text-4xl font-bold tracking-tight text-white mb-2">楽したい: とりあえずAIに頼ろう</h1>
+<p class="text-gray-400 text-lg">ナレッジはある。でも毎回探すのは面倒だ。</p>
+</header>
+<!-- Main Content -->
+<div class="flex flex-1 gap-12">
+<!-- Left Column: Visualization -->
+<div class="w-7/12 relative">
+<div class="comparison-container">
+<!-- Before: Hard Way -->
+<div class="process-box before">
+<div class="process-title">
+<i class="fas fa-history mr-2"></i>これまで (Hard Mode)
+                        </div>
+<div class="process-flow">
+<div class="node">
+<div class="node-icon">
+<i class="fas fa-user-injured"></i>
+</div>
+<p class="node-label">人間</p>
+</div>
+<div class="arrow"></div>
+<div class="node">
+<div class="node-icon">
+<i class="fas fa-search"></i>
+</div>
+<p class="node-label">Notion検索<br>(手動)</p>
+</div>
+<div class="arrow"></div>
+<div class="node">
+<div class="node-icon">
+<i class="fas fa-file-alt"></i>
+</div>
+<p class="node-label">大量の<br>ドキュメント</p>
+</div>
+<div class="arrow"></div>
+<div class="node">
+<div class="node-icon" style="position: relative; transform: translate(-8.1248px, 321.381px);">
+<i class="fas fa-pen"></i>
+</div><div class="node-icon" style="position: relative; transform: translate(-4.51378px, -27.0827px);">
+<i class="fas fa-pen"></i>
+</div>
+<p class="node-label" style="position: relative; transform: translate(-4.51378px, -18.0551px);">回答作成(大変)</p>
+</div>
+</div>
+</div>
+<!-- Transition Arrow -->
+<div class="flex justify-center -my-2 z-10">
+<div class="bg-gray-800 text-gray-400 rounded-full w-10 h-10 flex items-center justify-center border border-gray-600">
+<i class="fas fa-arrow-down"></i>
+</div>
+</div>
+<!-- After: AI Way -->
+<div class="process-box after">
+<div class="ai-badge">New Idea!</div>
+<div class="process-title text-blue-400 border-blue-500">
+<i class="fas fa-robot mr-2"></i>これから (Smart Mode)
+                        </div>
+<div class="process-flow">
+<div class="node">
+<div class="node-icon human">
+<i class="fas fa-user"></i>
+</div>
+<p class="node-label">人間</p>
+</div>
+<div class="arrow bg-blue-500"></div>
+<!-- AI Agent Center -->
+<div class="node">
+<div class="node-icon ai" style="width: 70px; height: 70px; font-size: 32px;">
+<i class="fas fa-brain"></i>
+</div>
+<p class="node-label text-blue-300">AI Agent</p>
+</div>
+<div class="arrow bg-blue-500"></div>
+<div class="node">
+
+<p class="node-label" style="position: relative; transform: translate(-7.22205px, 34.3047px);">解答作成</p>
+</div>
+</div>
+<div class="mt-4 bg-blue-900 bg-opacity-30 rounded-lg p-3 text-center border border-blue-500 border-opacity-30">
+<p class="text-sm text-blue-200">
+<i class="fas fa-check-circle mr-2"></i>AIが読んで、要約して、回答案を作ってくれる！
+                            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Text Content -->
+<div class="w-5/12 flex flex-col justify-center">
+<div class="mb-2">
+<div class="idea-bubble">
+<i class="fas fa-lightbulb mr-2 text-yellow-300"></i>そうだ、AIを使おう
+                    </div>
+</div>
+<div class="card-item">
+<h3 class="text-xl font-bold text-gray-200 mb-3">
+<i class="fas fa-book-open text-gray-400 mr-2"></i>
+                        Notionナレッジの課題
+                    </h3>
+<p class="text-gray-400 text-lg leading-relaxed">
+                        ナレッジは蓄積されているが、<br>
+<span class="text-red-300 font-bold">「どのページを見ればいいか」</span><br>
+                        を探すコストが高い。<br>
+                        毎回検索して読むのは辛い。
+                    </p>
+</div>
+<div class="card-item highlight">
+<h3 class="text-xl font-bold text-blue-200 mb-3">
+<i class="fas fa-magic text-blue-400 mr-2"></i>
+                        解決へのアプローチ
+                    </h3>
+<ul class="space-y-3">
+<li class="flex items-start">
+<i class="fas fa-angle-right text-blue-500 mt-2 mr-3"></i>
+<p class="text-gray-300 text-lg">
+                                工数を減らすために、AIに一次請けをさせたい
+                            </p>
+</li>
+<li class="flex items-start">
+<i class="fas fa-angle-right text-blue-500 mt-2 mr-3"></i>
+<p class="text-gray-300 text-lg">
+                                コードベースを検索して、調査方針を作りたい</p>
+</li>
+</ul>
+</div>
+<div class="mt-4 flex items-center gap-3 text-gray-500">
+<i class="fas fa-quote-left text-2xl"></i>
+<p class="italic text-lg">人間は最終確認と、<br>高度な判断だけに集中したい</p>
+</div>
+</div>
+</div>
+</div>
+
+</body></html>

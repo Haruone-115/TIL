@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>現状のエコシステム全体図</title>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@300;500;800&amp;family=Noto+Sans+JP:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            background-color: #0B1120;
+            font-family: 'M PLUS 1', 'Noto Sans JP', sans-serif;
+            overflow: hidden;
+            color: #ffffff;
+            position: relative;
+        }
+
+        /* SVG Pattern Background */
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.1;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='%2364748B' fill-opacity='0.4'/%3E%3C/svg%3E");
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 60px;
+        }
+
+        .header-line {
+            height: 4px;
+            width: 100px;
+            background-color: #3B82F6;
+            margin-bottom: 20px;
+        }
+
+        /* Network Map Container */
+        .network-container {
+            flex: 1;
+            position: relative;
+            margin-top: 10px;
+        }
+
+        /* Nodes */
+        .node {
+            position: absolute;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #1E293B;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 140px;
+            height: 100px;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+
+        .node:hover {
+            transform: translate(-50%, -55%);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.4);
+            border-color: #cbd5e1;
+        }
+
+        .node-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .node-label {
+            font-weight: bold;
+            font-size: 0.9rem;
+            line-height: 1.2;
+            color: #F1F5F9;
+        }
+
+        .node-sub {
+            font-size: 0.7rem;
+            color: #94A3B8;
+            margin-top: 4px;
+        }
+
+        /* Specific Node Styles */
+        .node-slack { border-color: #E01E5A; }
+        .node-slack .node-icon { color: #E01E5A; }
+
+        .node-codex { 
+            width: 160px; height: 120px;
+            border-color: #6366F1;
+            background-color: rgba(99, 102, 241, 0.1);
+        }
+        .node-codex .node-icon { color: #6366F1; }
+
+        .node-router {
+            width: 130px; height: 130px;
+            border-radius: 50%;
+            border-color: #F59E0B;
+            background-color: rgba(245, 158, 11, 0.1);
+        }
+        .node-router .node-icon { color: #F59E0B; }
+
+        .node-llm { border-color: #3B82F6; }
+        .node-llm .node-icon { color: #3B82F6; }
+
+        .node-skill { width: 130px; height: 80px; }
+        .skill-notion { border-color: #E2E8F0; }
+        .skill-repo { border-color: #A78BFA; }
+        .skill-redash { border-color: #F87171; }
+        .skill-format { border-color: #10B981; }
+
+        .node-external { 
+            width: 120px; height: 80px;
+            border-style: dashed;
+            background-color: rgba(15, 23, 42, 0.6);
+        }
+
+        /* Groups / Areas */
+        .area-label {
+            position: absolute;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748B;
+            background-color: #0F172A;
+            padding: 4px 8px;
+            border-radius: 4px;
+            z-index: 5;
+        }
+
+        .group-box {
+            position: absolute;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background-color: rgba(30, 41, 59, 0.2);
+            border-radius: 16px;
+            z-index: 1;
+        }
+
+        /* SVG Connections */
+        svg.connections {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+        
+        /* Legend */
+        .legend {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            gap: 16px;
+            background-color: rgba(15, 23, 42, 0.8);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            z-index: 30;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: #CBD5E1;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+    </style>
+</head>
+<body style="">
+<div class="bg-pattern"></div>
+<div class="content-wrapper">
+<!-- Header -->
+<header class="mb-4">
+<div class="header-line"></div>
+<h1 class="text-4xl font-bold tracking-tight text-white mb-2">現状のエコシステム全体図</h1>
+<p class="text-gray-400 text-lg">Codexをハブとして、チャットツール、LLM、各種Skills、外部システムが有機的に結合。</p>
+</header>
+<!-- Network Map -->
+<div class="network-container">
+<!-- Group Boxes -->
+<!-- Skills Group -->
+<div class="group-box" style="left: 720px; top: 180px; width: 180px; height: 380px;"></div>
+<div class="area-label" style="left: 720px; top: 160px;">Specific Skills</div>
+<!-- External Group -->
+
+
+<!-- SVG Lines -->
+<svg class="connections">
+<defs>
+<marker id="arrowhead" markerHeight="7" markerWidth="10" orient="auto" refX="10" refY="3.5">
+<polygon fill="#64748B" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<marker id="arrowhead-main" markerHeight="7" markerWidth="10" orient="auto" refX="10" refY="3.5">
+<polygon fill="#6366F1" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+</defs>
+<!-- Slack <-> Codex -->
+<path d="M 180 360 L 280 360" marker-end="url(#arrowhead-main)" stroke="#6366F1" stroke-width="3"></path>
+<!-- Codex <-> Router -->
+<path d="M 440 360 L 520 360" marker-end="url(#arrowhead-main)" stroke="#6366F1" stroke-width="3"></path>
+<!-- Codex <-> LLM -->
+<path d="M 360 290 L 360 180 L 490 180" marker-end="url(#arrowhead)" stroke="#3B82F6" stroke-dasharray="5,5" stroke-width="2"></path>
+<!-- Router -> Skills -->
+<!-- To Notion -->
+<path d="M 645 360 C 700 360, 680 230, 730 230" fill="none" marker-end="url(#arrowhead)" stroke="#94A3B8" stroke-width="2"></path>
+<!-- To Repo -->
+<path d="M 645 360 C 700 360, 680 320, 730 320" fill="none" marker-end="url(#arrowhead)" stroke="#94A3B8" stroke-width="2"></path>
+<!-- To Redash -->
+<path d="M 645 360 C 700 360, 680 410, 730 410" fill="none" marker-end="url(#arrowhead)" stroke="#94A3B8" stroke-width="2"></path>
+<!-- To Formatter -->
+<path d="M 645 360 C 700 360, 680 500, 730 500" fill="none" marker-end="url(#arrowhead)" stroke="#94A3B8" stroke-width="2"></path>
+<!-- Skills -> External -->
+<!-- Notion -->
+<line marker-end="url(#arrowhead)" stroke="#475569" stroke-dasharray="4,4" stroke-width="1.5" x1="875" x2="1030" y1="230" y2="230"></line>
+<!-- Repo -->
+<line marker-end="url(#arrowhead)" stroke="#475569" stroke-dasharray="4,4" stroke-width="1.5" x1="875" x2="1030" y1="320" y2="320"></line>
+<!-- Redash -->
+<line marker-end="url(#arrowhead)" stroke="#475569" stroke-dasharray="4,4" stroke-width="1.5" x1="875" x2="1030" y1="410" y2="410"></line>
+</svg>
+<!-- Node Elements -->
+<!-- 1. Interface -->
+<div class="node node-slack" style="left: 110px; top: 360px;">
+<i class="fab fa-slack node-icon"></i>
+<div class="node-label">Slack</div>
+<div class="node-sub">User Interface</div>
+</div>
+<!-- 2. Platform -->
+<div class="node node-codex" style="left: 360px; top: 360px;">
+<i class="fas fa-robot node-icon"></i>
+<div class="node-label">Codex Agent</div>
+<div class="node-sub">Platform / Execution</div>
+</div>
+<!-- 3. LLM -->
+<div class="node node-llm" style="left: 560px; top: 180px;">
+<i class="fas fa-brain node-icon"></i>
+<div class="node-label">LLM Base</div>
+<div class="node-sub">GPT-4 / Claude</div>
+</div>
+<!-- 4. Router -->
+<div class="node node-router" style="left: 580px; top: 360px;">
+<i class="fas fa-traffic-light node-icon"></i>
+<div class="node-label">Router Skill</div>
+<div class="node-sub">Dispatcher</div>
+</div>
+<!-- 5. Skills -->
+<div class="node node-skill skill-notion" style="left: 800px; top: 230px;">
+<i class="fas fa-book-open node-icon text-xl mb-1"></i>
+<div class="node-label text-sm">Notion Skill</div>
+</div>
+<div class="node node-skill skill-repo" style="left: 800px; top: 320px;">
+<i class="fas fa-code-branch node-icon text-xl mb-1" style="color: #A78BFA;"></i>
+<div class="node-label text-sm">Repo Skill</div>
+</div>
+<div class="node node-skill skill-redash" style="left: 800px; top: 410px;">
+<i class="fas fa-database node-icon text-xl mb-1" style="color: #F87171;"></i>
+<div class="node-label text-sm">Redash Skill</div>
+</div>
+<div class="node node-skill skill-format" style="left: 800px; top: 500px;">
+<i class="fas fa-magic node-icon text-xl mb-1" style="color: #34D399;"></i>
+<div class="node-label text-sm">Formatter</div>
+</div>
+<!-- 6. External -->
+
+
+
+<!-- Legend -->
+<div class="legend">
+<div class="legend-item">
+<div class="legend-dot" style="background-color: #6366F1;"></div>
+<span>Main Flow</span>
+</div>
+<div class="legend-item">
+<div class="legend-dot" style="background-color: #94A3B8;"></div>
+<span>Skill Call</span>
+</div>
+<div class="legend-item">
+<div class="legend-dot" style="background-color: #475569; border: 1px dashed #94A3B8;"></div>
+<span>External Access</span>
+</div>
+</div>
+</div>
+</div>
+
+</body></html>

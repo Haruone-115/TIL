@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>前提: 今年からサポート始めました</title>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@300;500;800&amp;family=Noto+Sans+JP:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            background-color: #0B1120;
+            font-family: 'M PLUS 1', 'Noto Sans JP', sans-serif;
+            overflow: hidden;
+            color: #ffffff;
+            position: relative;
+        }
+
+        /* Subtle grid background */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(#1e293b 1px, transparent 1px),
+                            linear-gradient(90deg, #1e293b 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 60px;
+        }
+
+        .header-line {
+            height: 4px;
+            width: 100px;
+            background-color: #3B82F6;
+            margin-bottom: 20px;
+        }
+
+        /* Flow Chart Styles */
+        .flow-container {
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px 0;
+        }
+
+        .flow-step {
+            background-color: #1E293B;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateX(10px);
+        }
+
+        .flow-line {
+            position: absolute;
+            left: 48px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #475569;
+            z-index: 1;
+        }
+
+        .step-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        /* Bottleneck Highlight */
+        .bottleneck {
+            border-color: #EF4444;
+            background-color: rgba(239, 68, 68, 0.1);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+            animation: pulse-red 2s infinite;
+        }
+
+        .bottleneck .step-icon {
+            background-color: #EF4444;
+            color: white;
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        /* Lists */
+        .custom-list li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 24px;
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .custom-list li::before {
+            content: "\f071"; /* Exclamation triangle */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            top: 4px;
+            color: #FBBF24; /* Amber */
+        }
+        
+        .alert-bubble {
+            position: absolute;
+            right: -20px;
+            top: -20px;
+            background-color: #EF4444;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transform: rotate(10deg);
+            z-index: 10;
+        }
+
+        .highlight-box {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3B82F6;
+            padding: 24px;
+            border-radius: 0 8px 8px 0;
+        }
+
+    </style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="content-wrapper">
+<!-- Header -->
+<header class="mb-8">
+<div class="header-line"></div>
+<h1 class="text-4xl font-bold tracking-tight text-white mb-2">前提: 今年からサポート始めました</h1>
+<p class="text-gray-400 text-lg">fOプロダクトのサポート業務を引き継いだものの…</p>
+</header>
+<!-- Main Content -->
+<div class="flex flex-1 gap-12">
+<!-- Left Column: Flow Chart -->
+<div class="w-7/12 relative">
+<div class="bg-gray-800 bg-opacity-40 rounded-2xl p-8 h-full border border-gray-700">
+<h3 class="text-xl font-bold text-gray-300 mb-6 flex items-center gap-3">
+<i class="fas fa-project-diagram text-blue-400"></i>
+                        現行のサポートフロー
+                    </h3>
+<div class="flow-container">
+<div class="flow-line"></div>
+<!-- Step 1 -->
+<div class="flow-step">
+<div class="step-icon bg-blue-900 text-blue-300">
+<i class="fas fa-user"></i>
+</div>
+<div class="flex-1">
+<p class="text-sm text-gray-400 font-bold mb-1">User / Customer</p>
+<p class="text-lg font-bold">質問・問い合わせ発生</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flow-step">
+<div class="step-icon bg-purple-900 text-purple-300">
+<i class="fab fa-slack"></i>
+</div>
+<div class="flex-1">
+<p class="text-sm text-gray-400 font-bold mb-1">Slack / Ticket System</p>
+<p class="text-lg font-bold">チケット起票・通知</p>
+</div>
+<div class="text-2xl text-gray-500">
+<i class="fas fa-arrow-down"></i>
+</div>
+</div>
+<!-- Step 3 (Bottleneck) -->
+<div class="flow-step bottleneck">
+<div class="alert-bubble">辛い！</div>
+<div class="step-icon">
+<i class="fas fa-search"></i>
+</div>
+<div class="flex-1">
+<p class="text-sm text-red-200 font-bold mb-1">Support Engineer (Human)</p>
+<p class="text-xl font-bold text-white">手動調査・仕様確認</p>
+<p class="text-sm text-red-300 mt-1">
+<i class="fas fa-times-circle mr-1"></i> ドキュメントどこ？
+                                    <i class="fas fa-times-circle mr-1"></i> コード読解困難
+                                </p>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="flow-step opacity-70">
+<div class="step-icon bg-green-900 text-green-300">
+<i class="fas fa-reply"></i>
+</div>
+<div class="flex-1">
+<p class="text-sm text-gray-400 font-bold mb-1">Response</p>
+<p class="text-lg font-bold">回答・解決</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Problem Points -->
+<div class="w-5/12 flex flex-col justify-center">
+<div class="mb-8">
+<h2 class="text-3xl font-bold text-red-400 mb-6">
+<i class="fas fa-fire mr-3"></i>課題: 業務がめっちゃ大変
+                    </h2>
+<ul class="custom-list text-gray-200">
+<li>
+<p class="font-bold mb-1">ドメイン知識不足</p>
+<p class="text-base text-gray-400">fOのことを全然知らないので、調査のたびに有識者に聞くか、大量のコードを読む必要がある。</p>
+</li>
+<li>
+<p class="font-bold mb-1">情報のサイロ化</p>
+<p class="text-base text-gray-400">Notion、コード、過去ログ… 何を見れば正解がわかるのか？検索コストが高い。</p>
+</li>
+<li>
+<p class="font-bold mb-1">終わらないコンテキストスイッチ</p>
+<p class="text-base text-gray-400">開発業務の合間に来る問い合わせで集中力が途切れる。</p>
+</li>
+</ul>
+</div>
+<div class="highlight-box">
+<p class="text-xl font-bold text-blue-200 mb-2">
+<i class="fas fa-lightbulb text-yellow-400 mr-2"></i>
+                        どうにかしたい！
+                    </p>
+<p class="text-gray-300">
+                        「楽をしたい」というエンジニアの三大美徳を発揮するときが来た。
+                    </p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

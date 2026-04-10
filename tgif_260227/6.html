@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>ルーターSkills構成</title>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@300;500;800&amp;family=Noto+Sans+JP:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            background-color: #0B1120;
+            font-family: 'M PLUS 1', 'Noto Sans JP', sans-serif;
+            overflow: hidden;
+            color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* SVG Pattern Background */
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.1;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l.83.828-1.415 1.415-.828-.828-.828.828-1.415-1.415.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828zM22.485 0l.83.828-1.415 1.415-.828-.828-.828.828-1.415-1.415.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828zM0 22.485l.828.83-1.415 1.415-.828-.828-.828.828L-3.658 22.485l.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828zM0 54.627l.828.83-1.415 1.415-.828-.828-.828.828L-3.658 54.627l.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828zM54.627 32.142l.83.828-1.415 1.415-.828-.828-.828.828-1.415-1.415.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828zM22.485 32.142l.83.828-1.415 1.415-.828-.828-.828.828-1.415-1.415.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828zM32.142 54.627l.828.83-1.415 1.415-.828-.828-.828.828-1.415-1.415.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828zM32.142 22.485l.828.83-1.415 1.415-.828-.828-.828.828-1.415-1.415.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828z' fill='%2394A3B8' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 60px;
+        }
+
+        .header-line {
+            height: 4px;
+            width: 100px;
+            background-color: #3B82F6;
+            margin-bottom: 20px;
+        }
+
+        /* Diagram Layout */
+        .diagram-container {
+            position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* Central Router Node */
+        .node-router {
+            position: absolute;
+            z-index: 20;
+            width: 180px;
+            height: 180px;
+            background-color: #1E293B;
+            border: 3px solid #F59E0B;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
+        }
+
+        .node-router i {
+            font-size: 48px;
+            color: #FBBF24;
+            margin-bottom: 10px;
+        }
+
+        /* Satellite Nodes */
+        .node-satellite {
+            position: absolute;
+            z-index: 10;
+            width: 200px;
+            background-color: #1E293B;
+            border: 2px solid #475569;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        /* Input/Output Nodes */
+        .node-io {
+            position: absolute;
+            z-index: 10;
+            width: 140px;
+            height: 80px;
+            background-color: rgba(15, 23, 42, 0.8);
+            border: 2px dashed #64748B;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94A3B8;
+            font-weight: bold;
+        }
+
+        /* Positioning */
+        /* Center (Router) is automatically centered by flex parent but we use absolute for consistent SVG coords */
+        .pos-center { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+        /* Satellites */
+        .pos-tl { top: 15%; left: 25%; } /* Notion */
+        .pos-tr { top: 15%; right: 25%; } /* Redash */
+        .pos-bl { bottom: 15%; left: 25%; } /* Repo */
+        .pos-br { bottom: 15%; right: 25%; } /* Formatter */
+
+        /* IO */
+        .pos-input { left: 0; top: 50%; transform: translateY(-50%); }
+        .pos-output { right: 0; top: 50%; transform: translateY(-50%); }
+
+        /* Specific Styles */
+        .node-notion { border-color: #E2E8F0; }
+        .node-notion i { color: #E2E8F0; }
+        
+        .node-redash { border-color: #F87171; }
+        .node-redash i { color: #F87171; }
+        
+        .node-repo { border-color: #A78BFA; }
+        .node-repo i { color: #A78BFA; }
+
+        .node-formatter { border-color: #34D399; }
+        .node-formatter i { color: #34D399; }
+
+        /* SVG Lines */
+        svg.connections {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* Flow Badges */
+        .flow-badge {
+            position: absolute;
+            background-color: #0F172A;
+            color: #3B82F6;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border: 1px solid #3B82F6;
+            z-index: 15;
+            white-space: nowrap;
+        }
+
+        /* Animations */
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(245, 158, 11, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+        }
+
+        .animate-pulse-slow {
+            animation: pulse-border 3s infinite;
+        }
+    </style>
+</head>
+<body style="">
+<div class="bg-pattern"></div>
+<div class="content-wrapper">
+<!-- Header -->
+<header class="mb-2">
+<div class="header-line"></div>
+<h1 class="text-4xl font-bold tracking-tight text-white mb-2">ルーターSkills構成</h1>
+<p class="text-gray-400 text-lg">すべての問い合わせは「Router Skill」がハンドリングし、専門Skillへ振り分ける。</p>
+</header>
+<!-- Diagram Area -->
+<div class="diagram-container">
+<!-- SVG Connections -->
+<svg class="connections">
+<!-- Defs for markers -->
+<defs>
+<marker id="arrowhead" markerHeight="7" markerWidth="10" orient="auto" refX="9" refY="3.5">
+<polygon fill="#475569" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<marker id="arrowhead-active" markerHeight="7" markerWidth="10" orient="auto" refX="9" refY="3.5">
+<polygon fill="#F59E0B" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+</defs>
+<!-- Input to Router -->
+<line marker-end="url(#arrowhead)" stroke="#475569" stroke-dasharray="5,5" stroke-width="2" x1="140" x2="470" y1="310" y2="310"></line>
+<!-- Router to Output -->
+<line marker-end="url(#arrowhead)" stroke="#475569" stroke-dasharray="5,5" stroke-width="2" x1="690" x2="1020" y1="310" y2="310"></line>
+<!-- Router to Notion (TL) -->
+<path d="M 580 230 L 460 150" stroke="#E2E8F0" stroke-opacity="0.6" stroke-width="2"></path>
+<!-- Router to Redash (TR) -->
+<path d="M 620 230 L 740 150" stroke="#F87171" stroke-opacity="0.6" stroke-width="2"></path>
+<!-- Router to Repo (BL) -->
+<path d="M 580 390 L 460 470" stroke="#A78BFA" stroke-opacity="0.6" stroke-width="2"></path>
+<!-- Router to Formatter (BR) -->
+<path d="M 620 390 L 740 470" stroke="#34D399" stroke-opacity="0.6" stroke-width="2"></path>
+</svg>
+<!-- Flow Labels -->
+<div class="flow-badge" style="left: 200px; top: 280px;">1. 入力 (Slack)</div>
+<div class="flow-badge" style="left: 450px; top: 180px; transform: translate(-185.065px, -11.7357px);">2. 意図分類・検索</div>
+<div class="flow-badge" style="right: 450px; top: 180px; transform: translate(114.65px, -126.386px);">3. クエリ生成</div>
+<div class="flow-badge" style="right: 200px; top: 280px;">5. 回答返却</div>
+<div class="flow-badge" style="left: 450px; bottom: 180px; transform: translate(-48.7488px, -138.122px);">3. コード調査</div>
+<div class="flow-badge" style="right: 450px; bottom: 180px; transform: translate(124.58px, -38.8185px);">4. 結果集約・整形</div>
+<!-- Nodes -->
+<!-- User Input -->
+<div class="node-io pos-input">
+<div class="flex flex-col items-center">
+<i class="fab fa-slack text-2xl mb-2"></i>
+<span>User Input</span>
+</div>
+</div>
+<!-- Central Router -->
+<div class="node-router pos-center animate-pulse-slow">
+<i class="fas fa-traffic-light"></i>
+<h2 class="text-xl font-bold text-white">Router Skill</h2>
+<p class="text-xs text-yellow-200 mt-1 font-bold">司令塔 / 分類器</p>
+</div>
+<!-- Notion Node (Top Left) -->
+
+<!-- Redash Node (Top Right) -->
+<div class="node-satellite node-redash pos-tr">
+<i class="fas fa-database text-3xl mb-2"></i>
+<h3 class="font-bold text-white">Query Writer</h3>
+<p class="text-xs text-gray-400 mt-1">Redash SQL生成・実行</p>
+<div class="mt-2 text-xs bg-gray-700 px-2 py-1 rounded">Text-to-SQL</div>
+</div>
+<!-- Repo Node (Bottom Left) -->
+<div class="node-satellite node-repo pos-bl" style="transform: translate(4.51378px, -94.7894px);">
+<i class="fas fa-code-branch text-3xl mb-2"></i>
+<h3 class="font-bold text-white">Repo Investigator</h3>
+<p class="text-xs text-gray-400 mt-1">コードベース読解・仕様特定</p>
+<div class="mt-2 text-xs bg-gray-700 px-2 py-1 rounded">Codex Integration</div>
+</div>
+<!-- Formatter Node (Bottom Right) -->
+<div class="node-satellite node-formatter pos-br">
+<i class="fas fa-magic text-3xl mb-2"></i>
+<h3 class="font-bold text-white">Response Formatter</h3>
+<p class="text-xs text-gray-400 mt-1">調査結果の文章化・整形</p>
+<div class="mt-2 text-xs bg-gray-700 px-2 py-1 rounded">Tone &amp; Voice</div>
+</div>
+<!-- Final Answer -->
+<div class="node-io pos-output" style="transform: translate(2.70826px, 5.41658px);">
+<div class="flex flex-col items-center">
+<i class="fas fa-reply text-2xl mb-2"></i>
+<span>Final Answer</span>
+</div>
+</div>
+</div>
+</div>
+
+</body></html>

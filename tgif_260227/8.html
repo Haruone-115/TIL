@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>実践開始: ミニ事例</title>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@300;500;800&amp;family=Noto+Sans+JP:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        width: 1280px;
+        height: 720px;
+        background-color: #0B1120;
+        font-family: 'M PLUS 1', 'Noto Sans JP', sans-serif;
+        overflow: hidden;
+        color: #ffffff;
+        position: relative;
+    }
+
+    /* SVG Pattern Background */
+    .bg-pattern {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0.1;
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20z' fill='%23475569' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
+
+    .content-wrapper {
+        position: relative;
+        z-index: 10;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 40px 60px;
+    }
+
+    .header-line {
+        height: 4px;
+        width: 100px;
+        background-color: #3B82F6;
+        margin-bottom: 20px;
+    }
+
+    /* Case Study Cards */
+    .cases-container {
+        display: flex;
+        gap: 32px;
+        flex: 1;
+        margin-bottom: 30px;
+    }
+
+    .case-card {
+        flex: 1;
+        background-color: #1E293B;
+        border: 1px solid #334155;
+        border-radius: 16px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .case-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #334155;
+        padding-bottom: 16px;
+    }
+
+    .case-icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+
+    /* Case A Specifics */
+    .case-a .case-icon-box {
+        background-color: rgba(139, 92, 246, 0.2);
+        color: #A78BFA;
+        border: 1px solid #8B5CF6;
+    }
+    .case-a { border-top: 4px solid #8B5CF6; }
+
+    /* Case B Specifics */
+    .case-b .case-icon-box {
+        background-color: rgba(239, 68, 68, 0.2);
+        color: #F87171;
+        border: 1px solid #EF4444;
+    }
+    .case-b { border-top: 4px solid #EF4444; }
+
+    /* Flow Steps */
+    .flow-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        flex: 1;
+    }
+
+    .step-item {
+        display: flex;
+        align-items: center;
+        background-color: #0F172A;
+        padding: 12px 16px;
+        border-radius: 8px;
+        border-left: 3px solid #475569;
+    }
+
+    .step-number {
+        background-color: #334155;
+        color: #E2E8F0;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: bold;
+        margin-right: 12px;
+        flex-shrink: 0;
+    }
+
+    .step-content {
+        font-size: 0.95rem;
+        color: #CBD5E1;
+    }
+
+    .step-arrow {
+        color: #64748B;
+        font-size: 0.8rem;
+        margin-left: 21px; /* align with line */
+        margin-top: -8px;
+        margin-bottom: -8px;
+        z-index: 1;
+    }
+
+    /* Highlighted Step (Manual Execution) */
+    .step-manual {
+        border-left-color: #F59E0B;
+        background-color: rgba(245, 158, 11, 0.1);
+    }
+    .step-manual .step-number {
+        background-color: #F59E0B;
+        color: #000;
+    }
+    .manual-badge {
+        font-size: 0.65rem;
+        background-color: #F59E0B;
+        color: #000;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-left: auto;
+        font-weight: bold;
+    }
+
+    /* Impact Section */
+    .impact-section {
+        background-color: rgba(59, 130, 246, 0.1);
+        border: 1px solid #3B82F6;
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .impact-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .impact-icon {
+        font-size: 2rem;
+        color: #60A5FA;
+    }
+
+    .impact-text {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .impact-title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #BFDBFE;
+    }
+
+    .impact-desc {
+        font-size: 0.85rem;
+        color: #93C5FD;
+    }
+
+</style>
+</head>
+<body style="">
+<div class="bg-pattern"></div>
+<div class="content-wrapper">
+<!-- Header -->
+<header class="mb-6">
+<div class="header-line"></div>
+<h1 class="text-4xl font-bold tracking-tight text-white mb-2">実践開始: ミニ事例</h1>
+<p class="text-gray-400 text-lg">まずは小さくスタート。調査系と作業系でそれぞれ試してみました。</p>
+</header>
+<!-- Cases Container -->
+<div class="cases-container">
+<!-- Case A: Code Investigation -->
+<div class="case-card case-a">
+<div class="case-header">
+<div class="case-icon-box">
+<i class="fas fa-code-branch"></i>
+</div>
+<div>
+<h2 class="text-xl font-bold text-white">Case A: コード調査</h2>
+<p class="text-sm text-gray-400">「この仕様、コードではどうなってる？」</p>
+</div>
+</div>
+<div class="flow-steps">
+<div class="step-item">
+<div class="step-number">1</div>
+<div class="step-content">
+<span class="font-bold text-gray-200">変更影響箇所の探索</span>
+<p class="text-xs text-gray-400 mt-1">関連するPRやファイルをリストアップ</p>
+</div>
+</div>
+<div class="step-arrow"><i class="fas fa-arrow-down"></i></div>
+<div class="step-item">
+<div class="step-number">2</div>
+<div class="step-content">
+<span class="font-bold text-gray-200">関連モジュールの要約</span>
+<p class="text-xs text-gray-400 mt-1">ロジックを読み解いて日本語で説明</p>
+</div>
+</div>
+<div class="step-arrow"><i class="fas fa-arrow-down"></i></div>
+<div class="step-item" style="border-left-color: #8B5CF6; background-color: rgba(139, 92, 246, 0.1);">
+<div class="step-number" style="background-color: #8B5CF6;">3</div>
+<div class="step-content">
+<span class="font-bold text-white">回答案の生成</span>
+<p class="text-xs text-gray-300 mt-1">エンジニア向け/CS向けの使い分けも可</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Case B: Redash Query -->
+<div class="case-card case-b">
+<div class="case-header">
+<div class="case-icon-box">
+<i class="fas fa-database"></i>
+</div>
+<div>
+<h2 class="text-xl font-bold text-white">Case B: Redashクエリ生成</h2>
+<p class="text-sm text-gray-400">「〇〇なユーザーのリストが欲しい」</p>
+</div>
+</div>
+<div class="flow-steps">
+<div class="step-item">
+<div class="step-number">1</div>
+<div class="step-content">
+<span class="font-bold text-gray-200">Router Skill</span>
+<p class="text-xs text-gray-400 mt-1">「DB検索が必要」と判断してQuery Writerへ</p>
+</div>
+</div>
+<div class="step-arrow"><i class="fas fa-arrow-down"></i></div>
+<div class="step-item">
+<div class="step-number">2</div>
+<div class="step-content">
+<span class="font-bold text-gray-200">Query Writer Skill</span>
+<p class="text-xs text-gray-400 mt-1">テーブル定義を基にSQLを作成</p>
+</div>
+</div>
+<div class="step-arrow"><i class="fas fa-arrow-down"></i></div>
+<!-- Manual Execution Step -->
+<div class="step-item step-manual">
+<div class="step-number">3</div>
+<div class="step-content flex-1">
+<span class="font-bold text-yellow-100">クエリの手動実行</span>
+<p class="text-xs text-yellow-200 mt-1">安全のため、実行は人が確認してから行う</p>
+</div>
+<span class="manual-badge">HUMAN</span>
+</div>
+<div class="step-arrow"><i class="fas fa-arrow-down"></i></div>
+<div class="step-item" style="border-left-color: #EF4444; background-color: rgba(239, 68, 68, 0.1);">
+<div class="step-number" style="background-color: #EF4444;">4</div>
+<div class="step-content">
+<span class="font-bold text-white">結果要約・返答</span>
+<p class="text-xs text-gray-300 mt-1">CSV結果を読み取って回答を作成</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Impact/Metrics -->
+<div class="impact-section" style="position: relative; transform: translate(-4.51378px, -35.2075px);">
+<div class="impact-item">
+<i class="fas fa-rocket impact-icon"></i>
+<div class="impact-text">
+<span class="impact-title">スピード感UP</span>
+<span class="impact-desc">初動の調査時間を大幅短縮</span>
+</div>
+</div>
+<div class="bg-blue-900 w-px h-10 opacity-50"></div>
+<div class="impact-item">
+<i class="fas fa-search-plus impact-icon"></i>
+<div class="impact-text">
+<span class="impact-title">調査の抜け漏れ軽減</span>
+<span class="impact-desc">AIが網羅的にドキュメントを検索</span>
+</div>
+</div>
+<div class="bg-blue-900 w-px h-10 opacity-50"></div>
+<div class="impact-item">
+<i class="fas fa-users-cog impact-icon"></i>
+<div class="impact-text">
+<span class="impact-title">脱・属人化</span>
+<span class="impact-desc">「あの人しか知らない」を減らす</span>
+</div>
+</div>
+</div>
+</div>
+
+</body></html>

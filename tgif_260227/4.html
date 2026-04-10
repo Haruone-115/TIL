@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Copilotに壁打ち→Skills化の着想</title>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@300;500;800&amp;family=Noto+Sans+JP:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            background-color: #0B1120;
+            font-family: 'M PLUS 1', 'Noto Sans JP', sans-serif;
+            overflow: hidden;
+            color: #ffffff;
+            position: relative;
+        }
+
+        /* SVG Background Pattern to replace CSS gradients */
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.1;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0V0zm1 1h38v38H1V1z' fill='%233B82F6' fill-opacity='0.5' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 60px;
+        }
+
+        .header-line {
+            height: 4px;
+            width: 100px;
+            background-color: #3B82F6;
+            margin-bottom: 20px;
+        }
+
+        /* Timeline Container */
+        .timeline-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        /* Connecting Line */
+        .timeline-line {
+            position: absolute;
+            top: 45%; /* Slightly above center to align with icons */
+            left: 80px;
+            right: 80px;
+            height: 4px;
+            background-color: #1E293B;
+            z-index: 1;
+        }
+
+        .timeline-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%; /* Full width for completed look */
+            background-color: #3B82F6; /* Fallback for gradient */
+            opacity: 0.3;
+        }
+
+        /* Step Card */
+        .step-card {
+            position: relative;
+            z-index: 2;
+            width: 260px;
+            background-color: #1E293B;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 320px;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            border-color: #60A5FA;
+        }
+
+        /* Step Number Badge */
+        .step-badge {
+            position: absolute;
+            top: -16px;
+            background-color: #0F172A;
+            color: #3B82F6;
+            border: 2px solid #3B82F6;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        /* Icons */
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+            background-color: #0F172A;
+            border: 1px solid #334155;
+        }
+
+        .step-1 .icon-wrapper { color: #60A5FA; border-color: #60A5FA; }
+        .step-2 .icon-wrapper { color: #A78BFA; border-color: #A78BFA; }
+        .step-3 .icon-wrapper { color: #F472B6; border-color: #F472B6; }
+        .step-4 .icon-wrapper { color: #34D399; border-color: #34D399; background-color: rgba(52, 211, 153, 0.1); }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #F8FAFC;
+        }
+
+        .step-desc {
+            font-size: 0.95rem;
+            color: #94A3B8;
+            line-height: 1.6;
+        }
+
+        /* Arrow between cards */
+        .arrow-connector {
+            position: absolute;
+            top: 45%;
+            right: -30px;
+            color: #475569;
+            font-size: 20px;
+            z-index: 0;
+        }
+        
+        .step-card:last-child .arrow-connector {
+            display: none;
+        }
+
+        /* Insight Box */
+        .insight-box {
+            margin-top: 40px;
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3B82F6;
+            padding: 16px 24px;
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="bg-pattern"></div>
+<div class="content-wrapper">
+<!-- Header -->
+<header>
+<div class="header-line"></div>
+<h1 class="text-4xl font-bold tracking-tight text-white mb-2">Copilotに壁打ち → Skills化の着想</h1>
+<p class="text-gray-400 text-lg">ただ使うだけじゃない。便利なパターンをシステム化する。</p>
+</header>
+<!-- Main Timeline Content -->
+<div class="flex-1 flex flex-col justify-center relative">
+<div class="timeline-container">
+<!-- Background Line -->
+<div class="timeline-line"></div>
+<!-- Step 1 -->
+<div class="step-card step-1">
+<div class="step-badge">1</div>
+<div class="icon-wrapper">
+<i class="fas fa-comments"></i>
+</div>
+<h3 class="step-title">調査の壁打ち</h3>
+<p class="step-desc">
+                        「これどうなってるの？」と<br/>
+                        Copilotにざっくり質問。<br/>
+                        対話の中で調査を進める。
+                    </p>
+<div class="arrow-connector">
+<i class="fas fa-chevron-right"></i>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="step-card step-2">
+<div class="step-badge">2</div>
+<div class="icon-wrapper">
+<i class="fas fa-filter"></i>
+</div>
+<h3 class="step-title">良パターン抽出</h3>
+<p class="step-desc">
+                        「この聞き方だといい回答が来る」<br/>
+                        「このログを見れば分かる」<br/>
+                        筋の良い調査方法を発見。
+                    </p>
+<div class="arrow-connector">
+<i class="fas fa-chevron-right"></i>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="step-card step-3">
+<div class="step-badge">3</div>
+<div class="icon-wrapper">
+<i class="fas fa-terminal"></i>
+</div>
+<h3 class="step-title">プロンプト化</h3>
+<p class="step-desc">
+                        発見した手順を<br/>
+                        汎用的なプロンプトに落とし込む。<br/>
+                        誰でも使える形へ。
+                    </p>
+<div class="arrow-connector">
+<i class="fas fa-chevron-right"></i>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="step-card step-4">
+<div class="step-badge">4</div>
+<div class="icon-wrapper">
+<i class="fas fa-cube"></i>
+</div>
+<h3 class="step-title">Skills化</h3>
+<p class="step-desc">
+                        プロンプトを「Skill」として<br/>
+                        パッケージ化。<br/>
+                        Agentが呼び出せる機能にする。
+                    </p>
+</div>
+</div>
+<!-- Bottom Insight -->
+<div class="flex justify-center mt-12">
+<div class="insight-box w-2/3">
+<div class="text-3xl text-yellow-400">
+<i class="fas fa-lightbulb"></i>
+</div>
+<div>
+<p class="text-xl font-bold text-blue-200 mb-1">アイデア</p>
+<p class="text-gray-300 text-lg">
+                            「Copilotの回答で汎用性のあるものを、そのままSkillsにすれば自動化できるのでは？」
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

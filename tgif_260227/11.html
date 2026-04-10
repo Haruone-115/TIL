@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>まとめ / Next Action</title>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@300;500;800&amp;family=Noto+Sans+JP:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            background-color: #0B1120;
+            font-family: 'M PLUS 1', 'Noto Sans JP', sans-serif;
+            overflow: hidden;
+            color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* SVG Pattern Background */
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.1;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2364748B' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 60px;
+        }
+
+        .header-line {
+            height: 4px;
+            width: 100px;
+            background-color: #3B82F6;
+            margin-bottom: 20px;
+        }
+
+        /* Main Grid */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            flex: 1;
+            margin-top: 20px;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: #1E293B;
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            border: 1px solid #334155;
+            transition: transform 0.3s ease;
+        }
+
+        /* Summary Card (Left) */
+        .card-summary {
+            border-top: 6px solid #10B981;
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+
+        /* Next Action Card (Right) */
+        .card-next {
+            border-top: 6px solid #8B5CF6;
+            background-color: rgba(139, 92, 246, 0.05);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-right: 16px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        /* List Items */
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: flex-start;
+            background-color: rgba(15, 23, 42, 0.4);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .list-item:hover {
+            border-color: #475569;
+            background-color: rgba(15, 23, 42, 0.6);
+            transform: translateX(4px);
+        }
+
+        .item-icon-box {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+
+        .item-content {
+            flex: 1;
+        }
+
+        .item-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .item-desc {
+            font-size: 0.9rem;
+            color: #94A3B8;
+            line-height: 1.5;
+        }
+
+        /* Specific Colors */
+        .summary-icon { color: #10B981; }
+        .next-icon { color: #8B5CF6; }
+
+        .item-check {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #10B981;
+        }
+
+        .item-rocket {
+            background-color: rgba(139, 92, 246, 0.2);
+            color: #8B5CF6;
+        }
+
+        /* Bottom Decoration */
+        .footer-deco {
+            position: absolute;
+            bottom: 30px;
+            right: 60px;
+            text-align: right;
+            opacity: 0.5;
+        }
+        
+        .footer-deco p {
+            font-size: 0.8rem;
+            color: #64748B;
+            margin: 0;
+        }
+
+        .arrow-decoration {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            color: #475569;
+            font-size: 2rem;
+            opacity: 0.5;
+        }
+
+    </style>
+</head>
+<body>
+<div class="bg-pattern"></div>
+<div class="content-wrapper">
+<!-- Header -->
+<header>
+<div class="header-line"></div>
+<h1 class="text-4xl font-bold tracking-tight text-white mb-2">まとめ / Next Action</h1>
+<p class="text-gray-400 text-lg">AI活用によるサポート自動化の旅は、まだ始まったばかり。</p>
+</header>
+<!-- Grid Layout -->
+<div class="summary-grid">
+<!-- Summary Card -->
+<div class="card card-summary">
+<div class="card-header">
+<i class="fas fa-check-circle card-icon summary-icon"></i>
+<h2 class="card-title text-green-400">Takeaway</h2>
+</div>
+<div class="list-container">
+<div class="list-item">
+<div class="item-icon-box item-check">
+<i class="fas fa-layer-group"></i>
+</div>
+<div class="item-content">
+<span class="item-title text-green-100">小さく試してSkills化</span>
+<p class="item-desc">
+                                手動の「壁打ち」から良パターンを見つけ、汎用的なSkillとして切り出すアプローチが有効。
+                            </p>
+</div>
+</div>
+<div class="list-item">
+<div class="item-icon-box item-check">
+<i class="fas fa-network-wired"></i>
+</div>
+<div class="item-content">
+<span class="item-title text-green-100">ルーターによる拡張性</span>
+<p class="item-desc">
+                                単一のエージェントですべて解決しようとせず、専門Skillへ振り分けるルーター構成でスケーラビリティを確保。
+                            </p>
+</div>
+</div>
+<div class="list-item">
+<div class="item-icon-box item-check">
+<i class="fas fa-robot"></i>
+</div>
+<div class="item-content">
+<span class="item-title text-green-100">Codex × サポートの相性</span>
+<p class="item-desc">
+                                コードベースを読めるCodexと、運用ナレッジを持つSkillを組み合わせることで、エンジニアサポートの質が向上。
+                            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Arrow between cards -->
+<div class="arrow-decoration">
+<i class="fas fa-chevron-right"></i>
+</div>
+<!-- Next Action Card -->
+<div class="card card-next">
+<div class="card-header">
+<i class="fas fa-flag card-icon next-icon"></i>
+<h2 class="card-title text-purple-400">Next Action</h2>
+</div>
+<div class="list-container">
+<div class="list-item">
+<div class="item-icon-box item-rocket">
+<i class="fas fa-brain"></i>
+</div>
+<div class="item-content">
+<span class="item-title text-purple-100">ルーティング精度の向上</span>
+<p class="item-desc">
+                                ユーザーの意図分類（Intent Classification）を強化し、より適切なSkillへ自動で振り分けられるようにする。
+                            </p>
+</div>
+</div>
+<div class="list-item">
+<div class="item-icon-box item-rocket">
+<i class="fas fa-user-shield"></i>
+</div>
+<div class="item-content">
+<span class="item-title text-purple-100">半自動運用の実証</span>
+<p class="item-desc">
+                                いきなり全自動ではなく、Slackでの下書き生成 → 人間による承認（Human-in-the-Loop）フローを確立する。
+                            </p>
+</div>
+</div>
+<div class="list-item">
+<div class="item-icon-box item-rocket">
+<i class="fas fa-server"></i>
+</div>
+<div class="item-content">
+<span class="item-title text-purple-100">運用基盤の整備</span>
+<p class="item-desc">
+                                本番運用に向けて、監査ログ（Audit Logs）、実行監視（Observability）、権限管理（RBAC）を実装する。
+                            </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Decoration -->
+<div class="footer-deco">
+<p>Thank you for listening!</p>
+</div>
+</div>
+</body>
+</html>

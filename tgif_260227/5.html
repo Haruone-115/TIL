@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Skills大量生産時代</title>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@300;500;800&amp;family=Noto+Sans+JP:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        width: 1280px;
+        height: 720px;
+        background-color: #0B1120;
+        font-family: 'M PLUS 1', 'Noto Sans JP', sans-serif;
+        overflow: hidden;
+        color: #ffffff;
+        position: relative;
+    }
+
+    /* SVG Pattern Background */
+    .bg-pattern {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0.1;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2394A3B8' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .content-wrapper {
+        position: relative;
+        z-index: 10;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 40px 60px;
+    }
+
+    .header-line {
+        height: 4px;
+        width: 100px;
+        background-color: #3B82F6;
+        margin-bottom: 20px;
+    }
+
+    /* Grid Layout */
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 24px;
+        height: 100%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    /* Card Styles */
+    .skill-card {
+        background-color: #1E293B;
+        border: 1px solid #334155;
+        border-radius: 16px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        position: relative;
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+
+    .skill-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+        border-color: #60A5FA;
+        background-color: #263346;
+    }
+
+    .card-icon-wrapper {
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-bottom: 16px;
+    }
+
+    .skill-title {
+        font-size: 1.25rem;
+        font-weight: 800;
+        margin-bottom: 8px;
+        color: #F8FAFC;
+    }
+
+    .skill-desc {
+        font-size: 0.95rem;
+        color: #94A3B8;
+        line-height: 1.5;
+    }
+
+    .tag-badge {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+        background-color: #0F172A;
+        color: #64748B;
+        border: 1px solid #334155;
+    }
+
+    /* Specific Card Colors */
+    .card-notion .card-icon-wrapper { background-color: rgba(255, 255, 255, 0.1); color: #E2E8F0; border: 1px solid #475569; }
+    .card-redash .card-icon-wrapper { background-color: rgba(239, 68, 68, 0.1); color: #F87171; border: 1px solid #991B1B; }
+    .card-codex .card-icon-wrapper { background-color: rgba(139, 92, 246, 0.1); color: #A78BFA; border: 1px solid #5B21B6; }
+    .card-faq .card-icon-wrapper { background-color: rgba(16, 185, 129, 0.1); color: #34D399; border: 1px solid #065F46; }
+    .card-runbook .card-icon-wrapper { background-color: rgba(245, 158, 11, 0.1); color: #FBBF24; border: 1px solid #92400E; }
+    
+    /* Router Card Special Style */
+    .card-router {
+        border-color: #F59E0B;
+        background-color: rgba(245, 158, 11, 0.05);
+    }
+    .card-router .card-icon-wrapper { background-color: #F59E0B; color: #ffffff; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
+    .card-router .skill-title { color: #FCD34D; }
+
+    /* Decoration */
+    .bg-circle {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background-color: #3B82F6;
+        filter: blur(80px);
+        opacity: 0.1;
+        z-index: 0;
+    }
+</style>
+</head>
+<body style="">
+<div class="bg-pattern"></div>
+<div class="bg-circle" style="top: -100px; right: -100px;"></div>
+<div class="bg-circle" style="bottom: -100px; left: -100px; background-color: #8B5CF6;"></div>
+<div class="content-wrapper">
+<!-- Header -->
+<header class="mb-6 flex-shrink-0">
+<div class="header-line"></div>
+<h1 class="text-4xl font-bold tracking-tight text-white mb-2">Skills大量生産時代</h1>
+<p class="text-gray-400 text-lg">Notion MCPなどを活用して、必要な機能をどんどんSkill化！</p>
+</header>
+<!-- Main Grid Content -->
+<div class="flex-1">
+<div class="skills-grid">
+<!-- Card 1: Notion Knowledge -->
+
+<!-- Card 2: Redash Query -->
+<div class="skill-card card-redash">
+<div class="tag-badge">DB</div>
+<div class="card-icon-wrapper">
+<i class="fas fa-database"></i>
+</div>
+<h3 class="skill-title">Redash Query Writer</h3>
+<p class="skill-desc">
+                    「〜のユーザー一覧が欲しい」と言うと、適切なMongoクエリを書いてくれるSkill。
+                    テーブル定義も把握済み。
+                </p>
+</div>
+<!-- Card 3: Code Investigator -->
+<div class="skill-card card-codex">
+<div class="tag-badge">Codex</div>
+<div class="card-icon-wrapper">
+<i class="fas fa-code-branch"></i>
+</div>
+<h3 class="skill-title">各種サポートナレッジに特化したSkills</h3>
+<p class="skill-desc">Notion 上にまとめられた各種ナレッジを、内容ごとに分けてSkill化しました</p>
+</div>
+<!-- Card 4: FAQ / Template -->
+
+<!-- Card 5: Runbook -->
+
+<!-- Card 6: Router Skill -->
+<div class="skill-card card-router">
+<div class="tag-badge">Core</div>
+<div class="card-icon-wrapper">
+<i class="fas fa-traffic-light"></i>
+</div>
+<h3 class="skill-title">Router Skill</h3>
+<p class="skill-desc">
+                    ユーザーの質問意図を理解し、どのSkillを使うべきか判断する司令塔。<br>
+                    すべてのリクエストの入り口。
+                </p>
+</div>
+</div>
+</div>
+</div>
+
+</body></html>
